@@ -29,14 +29,18 @@
             -webkit-text-fill-color: transparent;
         }
         nav a {
-    color: #ebd5b8;
-    text-decoration: none;
-    margin-left: 30px;
-    font-size: 13px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    opacity: 0.7;
-}
+            color: white;
+            text-decoration: none;
+            margin-left: 30px;
+            font-size: 13px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+            padding: 8px 20px;
+            border: 1px solid #ff9ec4;
+            border-radius: 20px;
+            background: linear-gradient(90deg, #ff9ec4, #c084fc);
+        }
         .page-title {
             padding: 40px 48px 10px;
         }
@@ -125,6 +129,7 @@
         }
         .table-container {
             padding: 0 48px 60px;
+            overflow-x: auto;
         }
         table {
             width: 100%;
@@ -147,6 +152,82 @@
             color: rgba(255,255,255,0.7);
         }
         tr:hover td { background: rgba(255,158,196,0.03); color: white; }
+
+        /* MOBILE */
+        @media (max-width: 768px) {
+            header {
+                padding: 16px 20px;
+                flex-direction: row;
+                justify-content: space-between;
+            }
+            .logo { font-size: 18px; }
+            nav a {
+                font-size: 11px;
+                padding: 6px 14px;
+                letter-spacing: 1px;
+            }
+            .page-title {
+                padding: 24px 20px 8px;
+            }
+            .page-title h1 {
+                font-size: 20px;
+                letter-spacing: 2px;
+            }
+            .page-title p { font-size: 11px; }
+            .divider { margin: 12px 20px; }
+            .stats {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                padding: 12px 20px;
+            }
+            .stat-card {
+                padding: 20px 18px;
+                display: flex;
+                align-items: center;
+                gap: 16px;
+            }
+            .stat-card::before {
+                width: 3px;
+                height: 100%;
+            }
+            .stat-card .label {
+                font-size: 10px;
+                margin-bottom: 4px;
+            }
+            .stat-card .value {
+                font-size: 32px;
+            }
+            .charts {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                padding: 0 20px;
+            }
+            .chart-full {
+                padding: 12px 20px 0;
+            }
+            .chart-box {
+                padding: 16px;
+                border-radius: 10px;
+            }
+            .chart-box .chart-title {
+                font-size: 10px;
+                letter-spacing: 1.5px;
+                margin-bottom: 12px;
+            }
+            h2.section-title {
+                padding: 24px 20px 12px;
+                font-size: 10px;
+            }
+            .table-container {
+                padding: 0 20px 40px;
+            }
+            table {
+                min-width: 550px;
+                font-size: 12px;
+            }
+            th { font-size: 10px; padding: 10px 8px; }
+            td { font-size: 12px; padding: 10px 8px; }
+        }
     </style>
 </head>
 <body>
@@ -165,19 +246,25 @@
 
     <div class="stats">
         <div class="stat-card">
-            <div class="label">Projets enregistrés</div>
-            <div class="value">{{ data|length }}</div>
-        </div>
-        <div class="stat-card">
-            <div class="label">Âge moyen</div>
-            <div class="value">
-                {% if data %}{{ (data|map(attribute='age')|list|sum / data|length)|int }}{% else %}0{% endif %}
+            <div>
+                <div class="label">Projets enregistrés</div>
+                <div class="value">{{ data|length }}</div>
             </div>
         </div>
         <div class="stat-card">
-            <div class="label">CA moyen (FCFA)</div>
-            <div class="value">
-                {% if data %}{{ (data|map(attribute='chiffre_affaires')|list|sum / data|length)|int }}{% else %}0{% endif %}
+            <div>
+                <div class="label">Âge moyen</div>
+                <div class="value">
+                    {% if data %}{{ (data|map(attribute='age')|list|sum / data|length)|int }}{% else %}0{% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div>
+                <div class="label">CA moyen (FCFA)</div>
+                <div class="value">
+                    {% if data %}{{ (data|map(attribute='chiffre_affaires')|list|sum / data|length)|int }}{% else %}0{% endif %}
+                </div>
             </div>
         </div>
     </div>
@@ -185,18 +272,18 @@
     <div class="charts">
         <div class="chart-box">
             <div class="chart-title">Répartition par secteur — Camembert</div>
-            <div id="camembertChart" style="height:320px"></div>
+            <div id="camembertChart" style="height:280px"></div>
         </div>
         <div class="chart-box">
             <div class="chart-title">Projets par secteur — Histogramme</div>
-            <div id="histogrammeChart" style="height:320px"></div>
+            <div id="histogrammeChart" style="height:280px"></div>
         </div>
     </div>
 
     <div class="chart-full">
         <div class="chart-box">
             <div class="chart-title">Capital vs Chiffre d'affaires — Nuage de points</div>
-            <div id="nuageChart" style="height:320px"></div>
+            <div id="nuageChart" style="height:300px"></div>
         </div>
     </div>
 
@@ -208,8 +295,8 @@
                 <th>Âge</th>
                 <th>Pays</th>
                 <th>Secteur</th>
-                <th>Capital (FCFA)</th>
-                <th>CA mensuel (FCFA)</th>
+                <th>Capital</th>
+                <th>CA mensuel</th>
                 <th>Difficultés</th>
             </tr>
             {% for row in data %}
@@ -229,11 +316,15 @@
     <script>
         const data = {{ data | tojson }};
         const colors = ['#ff9ec4', '#c084fc', '#f5e6d3', '#db99b3', '#a855f7', '#fcd5e7'];
+        const isMobile = window.innerWidth <= 768;
+
         const layout_base = {
             paper_bgcolor: 'transparent',
             plot_bgcolor: 'transparent',
-            font: { color: 'rgba(255,255,255,0.6)', size: 12 },
-            margin: { t: 10, b: 50, l: 50, r: 10 }
+            font: { color: 'rgba(255,255,255,0.6)', size: isMobile ? 10 : 12 },
+            margin: isMobile
+                ? { t: 10, b: 40, l: 30, r: 10 }
+                : { t: 10, b: 50, l: 50, r: 10 }
         };
 
         const secteurs = {};
@@ -246,9 +337,17 @@
             labels: Object.keys(secteurs),
             values: Object.values(secteurs),
             marker: { colors: colors },
-            textfont: { color: 'white' },
+            textfont: { color: 'white', size: isMobile ? 9 : 12 },
             hole: 0.4
-        }], { ...layout_base, showlegend: true });
+        }], {
+            ...layout_base,
+            showlegend: true,
+            legend: {
+                font: { size: isMobile ? 9 : 11, color: 'rgba(255,255,255,0.7)' },
+                orientation: isMobile ? 'h' : 'v',
+                x: 0, y: isMobile ? -0.3 : 1
+            }
+        });
 
         Plotly.newPlot('histogrammeChart', [{
             type: 'bar',
@@ -257,8 +356,18 @@
             marker: { color: colors, opacity: 0.85 }
         }], {
             ...layout_base,
-            xaxis: { color: 'rgba(255,255,255,0.4)', gridcolor: 'rgba(255,255,255,0.05)' },
-            yaxis: { color: 'rgba(255,255,255,0.4)', gridcolor: 'rgba(255,255,255,0.05)', title: 'Nombre' }
+            xaxis: {
+                color: 'rgba(255,255,255,0.4)',
+                gridcolor: 'rgba(255,255,255,0.05)',
+                tickfont: { size: isMobile ? 8 : 11 },
+                tickangle: isMobile ? -35 : 0
+            },
+            yaxis: {
+                color: 'rgba(255,255,255,0.4)',
+                gridcolor: 'rgba(255,255,255,0.05)',
+                title: 'Nombre',
+                tickfont: { size: isMobile ? 8 : 11 }
+            }
         });
 
         Plotly.newPlot('nuageChart', [{
@@ -268,12 +377,22 @@
             y: data.map(d => d.chiffre_affaires),
             text: data.map(d => d.nom),
             textposition: 'top center',
-            marker: { color: '#ff9ec4', size: 14, opacity: 0.85 },
-            textfont: { color: 'rgba(255,255,255,0.6)' }
+            marker: { color: '#ff9ec4', size: isMobile ? 10 : 14, opacity: 0.85 },
+            textfont: { color: 'rgba(255,255,255,0.6)', size: isMobile ? 8 : 11 }
         }], {
             ...layout_base,
-            xaxis: { title: 'Capital (FCFA)', color: 'rgba(255,255,255,0.4)', gridcolor: 'rgba(255,255,255,0.05)' },
-            yaxis: { title: 'CA mensuel (FCFA)', color: 'rgba(255,255,255,0.4)', gridcolor: 'rgba(255,255,255,0.05)' }
+            xaxis: {
+                title: 'Capital (FCFA)',
+                color: 'rgba(255,255,255,0.4)',
+                gridcolor: 'rgba(255,255,255,0.05)',
+                tickfont: { size: isMobile ? 8 : 11 }
+            },
+            yaxis: {
+                title: 'CA mensuel',
+                color: 'rgba(255,255,255,0.4)',
+                gridcolor: 'rgba(255,255,255,0.05)',
+                tickfont: { size: isMobile ? 8 : 11 }
+            }
         });
     </script>
 </body>

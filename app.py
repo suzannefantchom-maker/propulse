@@ -126,6 +126,15 @@ def soumettre():
         diagnostic=diagnostic
     )
 
+@app.route('/supprimer/<int:id>', methods=['POST'])
+def supprimer(id):
+    conn = sqlite3.connect('propulse.db')
+    c = conn.cursor()
+    c.execute('DELETE FROM entrepreneurs WHERE id = ?', (id,))
+    conn.commit()
+    conn.close()
+    return redirect('/dashboard')
+
 @app.route('/dashboard')
 def dashboard():
     conn = sqlite3.connect('propulse.db')

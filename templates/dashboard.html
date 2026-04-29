@@ -41,9 +41,7 @@
             border-radius: 20px;
             background: linear-gradient(90deg, #ff9ec4, #c084fc);
         }
-        .page-title {
-            padding: 40px 48px 10px;
-        }
+        .page-title { padding: 40px 48px 10px; }
         .page-title h1 {
             font-size: 32px;
             font-weight: 300;
@@ -103,9 +101,7 @@
             gap: 16px;
             padding: 0 48px;
         }
-        .chart-full {
-            padding: 16px 48px 0;
-        }
+        .chart-full { padding: 16px 48px 0; }
         .chart-box {
             background: rgba(255,255,255,0.02);
             border-radius: 12px;
@@ -131,10 +127,7 @@
             padding: 0 48px 60px;
             overflow-x: auto;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+        table { width: 100%; border-collapse: collapse; }
         th {
             padding: 12px 16px;
             text-align: left;
@@ -152,79 +145,37 @@
             color: rgba(255,255,255,0.7);
         }
         tr:hover td { background: rgba(255,158,196,0.03); color: white; }
+        .btn-supprimer {
+            background: rgba(255,100,100,0.15);
+            border: 1px solid rgba(255,100,100,0.3);
+            color: #ff6b6b;
+            padding: 6px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 11px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .btn-supprimer:hover { background: rgba(255,100,100,0.3); }
 
-        /* MOBILE */
         @media (max-width: 768px) {
-            header {
-                padding: 16px 20px;
-                flex-direction: row;
-                justify-content: space-between;
-            }
+            header { padding: 16px 20px; }
             .logo { font-size: 18px; }
-            nav a {
-                font-size: 11px;
-                padding: 6px 14px;
-                letter-spacing: 1px;
-            }
-            .page-title {
-                padding: 24px 20px 8px;
-            }
-            .page-title h1 {
-                font-size: 20px;
-                letter-spacing: 2px;
-            }
+            nav a { font-size: 11px; padding: 6px 14px; letter-spacing: 1px; }
+            .page-title { padding: 24px 20px 8px; }
+            .page-title h1 { font-size: 20px; letter-spacing: 2px; }
             .page-title p { font-size: 11px; }
             .divider { margin: 12px 20px; }
-            .stats {
-                grid-template-columns: 1fr;
-                gap: 12px;
-                padding: 12px 20px;
-            }
-            .stat-card {
-                padding: 20px 18px;
-                display: flex;
-                align-items: center;
-                gap: 16px;
-            }
-            .stat-card::before {
-                width: 3px;
-                height: 100%;
-            }
-            .stat-card .label {
-                font-size: 10px;
-                margin-bottom: 4px;
-            }
-            .stat-card .value {
-                font-size: 32px;
-            }
-            .charts {
-                grid-template-columns: 1fr;
-                gap: 12px;
-                padding: 0 20px;
-            }
-            .chart-full {
-                padding: 12px 20px 0;
-            }
-            .chart-box {
-                padding: 16px;
-                border-radius: 10px;
-            }
-            .chart-box .chart-title {
-                font-size: 10px;
-                letter-spacing: 1.5px;
-                margin-bottom: 12px;
-            }
-            h2.section-title {
-                padding: 24px 20px 12px;
-                font-size: 10px;
-            }
-            .table-container {
-                padding: 0 20px 40px;
-            }
-            table {
-                min-width: 550px;
-                font-size: 12px;
-            }
+            .stats { grid-template-columns: 1fr; gap: 12px; padding: 12px 20px; }
+            .stat-card { padding: 20px 18px; }
+            .stat-card .value { font-size: 32px; }
+            .charts { grid-template-columns: 1fr; gap: 12px; padding: 0 20px; }
+            .chart-full { padding: 12px 20px 0; }
+            .chart-box { padding: 16px; }
+            .chart-box .chart-title { font-size: 10px; margin-bottom: 12px; }
+            h2.section-title { padding: 24px 20px 12px; font-size: 10px; }
+            .table-container { padding: 0 20px 40px; }
+            table { min-width: 550px; }
             th { font-size: 10px; padding: 10px 8px; }
             td { font-size: 12px; padding: 10px 8px; }
         }
@@ -246,25 +197,19 @@
 
     <div class="stats">
         <div class="stat-card">
-            <div>
-                <div class="label">Projets enregistrés</div>
-                <div class="value">{{ data|length }}</div>
+            <div class="label">Projets enregistrés</div>
+            <div class="value">{{ data|length }}</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">Âge moyen</div>
+            <div class="value">
+                {% if data %}{{ (data|map(attribute='age')|list|sum / data|length)|int }}{% else %}0{% endif %}
             </div>
         </div>
         <div class="stat-card">
-            <div>
-                <div class="label">Âge moyen</div>
-                <div class="value">
-                    {% if data %}{{ (data|map(attribute='age')|list|sum / data|length)|int }}{% else %}0{% endif %}
-                </div>
-            </div>
-        </div>
-        <div class="stat-card">
-            <div>
-                <div class="label">CA moyen (FCFA)</div>
-                <div class="value">
-                    {% if data %}{{ (data|map(attribute='chiffre_affaires')|list|sum / data|length)|int }}{% else %}0{% endif %}
-                </div>
+            <div class="label">CA moyen (FCFA)</div>
+            <div class="value">
+                {% if data %}{{ (data|map(attribute='chiffre_affaires')|list|sum / data|length)|int }}{% else %}0{% endif %}
             </div>
         </div>
     </div>
@@ -298,6 +243,7 @@
                 <th>Capital</th>
                 <th>CA mensuel</th>
                 <th>Difficultés</th>
+                <th>Action</th>
             </tr>
             {% for row in data %}
             <tr>
@@ -308,6 +254,11 @@
                 <td>{{ row.capital }}</td>
                 <td>{{ row.chiffre_affaires }}</td>
                 <td>{{ row.difficultes }}</td>
+                <td>
+                    <form action="/supprimer/{{ row.id }}" method="POST" onsubmit="return confirm('Supprimer cette entrée ?')">
+                        <button type="submit" class="btn-supprimer">Supprimer</button>
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </table>
@@ -317,20 +268,15 @@
         const data = {{ data | tojson }};
         const colors = ['#ff9ec4', '#c084fc', '#f5e6d3', '#db99b3', '#a855f7', '#fcd5e7'];
         const isMobile = window.innerWidth <= 768;
-
         const layout_base = {
             paper_bgcolor: 'transparent',
             plot_bgcolor: 'transparent',
             font: { color: 'rgba(255,255,255,0.6)', size: isMobile ? 10 : 12 },
-            margin: isMobile
-                ? { t: 10, b: 40, l: 30, r: 10 }
-                : { t: 10, b: 50, l: 50, r: 10 }
+            margin: isMobile ? { t: 10, b: 40, l: 30, r: 10 } : { t: 10, b: 50, l: 50, r: 10 }
         };
 
         const secteurs = {};
-        data.forEach(d => {
-            secteurs[d.secteur] = (secteurs[d.secteur] || 0) + 1;
-        });
+        data.forEach(d => { secteurs[d.secteur] = (secteurs[d.secteur] || 0) + 1; });
 
         Plotly.newPlot('camembertChart', [{
             type: 'pie',

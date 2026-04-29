@@ -28,13 +28,23 @@
             -webkit-text-fill-color: transparent;
         }
         nav a {
-            color: #f5e6d3;
+            color: white;
             text-decoration: none;
-            margin-left: 30px;
-            font-size: 13px;
+            margin-left: 15px;
+            font-size: 12px;
             letter-spacing: 1px;
             text-transform: uppercase;
-            opacity: 0.7;
+            font-weight: 600;
+            padding: 7px 16px;
+            border-radius: 20px;
+        }
+        nav a.btn-dash {
+            background: linear-gradient(90deg, #ff9ec4, #c084fc);
+            border: none;
+        }
+        nav a.btn-form {
+            border: 1px solid rgba(255,158,196,0.4);
+            color: #f5e6d3;
         }
         .container {
             max-width: 800px;
@@ -64,8 +74,6 @@
             background: linear-gradient(90deg, #ff9ec4, #c084fc, transparent);
             margin: 30px 0;
         }
-
-        /* Comparaison CA */
         .comparaison {
             display: grid;
             grid-template-columns: 1fr auto 1fr;
@@ -88,12 +96,12 @@
             margin-bottom: 12px;
         }
         .ca-card .montant {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 200;
             color: #ff9ec4;
         }
         .ca-card .benefice {
-            font-size: 13px;
+            font-size: 12px;
             margin-top: 8px;
             color: rgba(255,255,255,0.4);
         }
@@ -104,21 +112,19 @@
         .ca-card.after .montant { color: #c084fc; }
         .fleche {
             text-align: center;
-            font-size: 30px;
+            font-size: 24px;
             color: #ff9ec4;
         }
         .gain-badge {
             display: inline-block;
             background: linear-gradient(90deg, #ff9ec4, #c084fc);
             color: white;
-            padding: 6px 16px;
+            padding: 5px 14px;
             border-radius: 20px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
-            margin-top: 10px;
+            margin-top: 8px;
         }
-
-        /* Conseils */
         .section-title {
             font-size: 11px;
             letter-spacing: 2px;
@@ -136,7 +142,7 @@
             border-left: 3px solid #ff9ec4;
         }
         .conseil-card .probleme {
-            font-size: 13px;
+            font-size: 12px;
             color: #ff9ec4;
             letter-spacing: 1px;
             text-transform: uppercase;
@@ -153,7 +159,14 @@
             color: #c084fc;
             letter-spacing: 1px;
         }
-
+        .actions {
+            text-align: center;
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
         .btn {
             display: inline-block;
             padding: 14px 32px;
@@ -164,28 +177,45 @@
             font-size: 14px;
             font-weight: 600;
             letter-spacing: 1px;
-            margin-top: 30px;
         }
         .btn-outline {
             background: transparent;
             border: 1px solid rgba(255,158,196,0.4);
-            margin-left: 15px;
             color: #f5e6d3;
         }
-        .actions { text-align: center; }
+
+        @media (max-width: 768px) {
+            header { padding: 16px 20px; }
+            .logo { font-size: 18px; }
+            nav a { font-size: 10px; padding: 6px 12px; }
+            .container { padding: 30px 16px; }
+            .welcome h1 { font-size: 24px; }
+            .comparaison {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            .fleche { transform: rotate(90deg); }
+            .ca-card { padding: 20px; }
+            .ca-card .montant { font-size: 20px; }
+            .conseil-card { padding: 16px; }
+            .conseil-card .texte { font-size: 14px; }
+            .actions { flex-direction: column; align-items: center; }
+            .btn { width: 100%; text-align: center; }
+        }
     </style>
 </head>
 <body>
     <header>
         <div class="logo">PROPULSE</div>
         <nav>
-            <a href="/">Formulaire</a>
+            <a href="/" class="btn-form">Formulaire</a>
+            <a href="/dashboard" class="btn-dash">Dashboard</a>
         </nav>
     </header>
 
     <div class="container">
         <div class="welcome">
-            <h1>Bonjour {{ nom }} </h1>
+            <h1>Bonjour {{ nom }} !</h1>
             <p>Voici votre diagnostic personnalisé — secteur : {{ secteur }}</p>
         </div>
 
@@ -233,7 +263,8 @@
         {% endfor %}
 
         <div class="actions">
-            <a href="/" class="btn">Soumettre un autre projet</a>
+            <a href="/" class="btn btn-outline">Soumettre un autre projet</a>
+            <a href="/dashboard" class="btn">Voir le Dashboard</a>
         </div>
     </div>
 </body>
